@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my-postgres-container_compose
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: ITF
+      POSTGRES_DB: projecthostingdb
+    ports:
+      - "5432:5432"
+    networks:
+      my-network:
+        ipv4_address: 172.19.0.2
+
+  fileapi:
+    image: mats1008/fileuploadapi:2
+    container_name: fileapi_container_compose
+    environment:
+      POSTGRES_HOST: 172.19.0.2
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: ITF
+      POSTGRES_DB: projecthostingdb
+    ports:
+      - "8000:8000"
+    networks:
+      my-network:
+        ipv4_address: 172.19.0.3
+
+  fileuploadphp:
+    image: mats1008/fileuploadphp:2
+    container_name: fileuploadphp_container_compose
+    ports:
+      - "80:80"
+    volumes:
+      - /files/user/:/files/user/
+    networks:
+      my-network:
+        ipv4_address: 172.19.0.4
+
+networks:
+  my-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
+
+
