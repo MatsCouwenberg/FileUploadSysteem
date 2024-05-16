@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   postgres:
@@ -13,6 +13,11 @@ services:
     networks:
       my-network:
         ipv4_address: 172.19.0.2
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d projecthostingdb"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
 
   fileapi:
     image: mats1008/fileuploadapi:2
@@ -27,6 +32,9 @@ services:
     networks:
       my-network:
         ipv4_address: 172.19.0.3
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   fileuploadphp:
     image: mats1008/fileuploadphp:2
@@ -38,6 +46,9 @@ services:
     networks:
       my-network:
         ipv4_address: 172.19.0.4
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 networks:
   my-network:
@@ -45,5 +56,3 @@ networks:
     ipam:
       config:
         - subnet: 172.19.0.0/16
-
-

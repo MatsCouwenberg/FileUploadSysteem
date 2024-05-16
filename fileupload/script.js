@@ -1,6 +1,7 @@
-// Variables
-const fileOwner = 'user';
-const uploadDir = '/files/user/';
+// Init
+const uploadDir = '/files/';
+const fileOwner = 'user1'; //moet endpoint worden dat owner van het project ophaalt
+const projectNaam = 'project1'; //moet endpoint worden dat projectnaam ophaalt
 
 // Event listener for the upload button
 document.getElementById('uploadButton').addEventListener('click', function() {
@@ -22,13 +23,16 @@ document.getElementById('uploadButton').addEventListener('click', function() {
                     fileInput.value = '';
 
                     // Prepare data for API call
+                    const fileName = file.name;
+                    const filePath = uploadDir + fileOwner + '/' + projectNaam + '/' + fileName;
+
                     const postData = {
-                        filename: file.name,
-                        path: uploadDir + file.name,
+                        filename: fileName,
+                        path: filePath,
                         username: fileOwner
                     };
 
-                    // Send data to API endpointZ
+                    // Send data to API endpoint
                     fetch('http://10.0.99.141:8000/upload/', {
                         method: 'POST',
                         headers: {
