@@ -37,12 +37,12 @@ services:
         condition: service_healthy
 
   fileuploadphp:
-    image: mats1008/fileuploadphp:2
+    image: mats1008/fileuploadphp:4
     container_name: fileuploadphp_container_compose
     ports:
       - "80:80"
     volumes:
-      - /files/user/:/files/user/
+      - /files/:/files/
     networks:
       my-network:
         ipv4_address: 172.19.0.4
